@@ -197,6 +197,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     private boolean lunar;
     private int lunarOffset;
     private TextView stats;
+    private DashboardController dashboard;
     private List<RaceWeekend.Race> raceCalendar;
     private View racePanel;
     private TextView raceKicker, raceHeadline, raceSessions;
@@ -577,6 +578,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         btnWifi = findViewById(R.id.btnWifi);
         shamsiDate = findViewById(R.id.shamsiDate);
         stats = findViewById(R.id.stats);
+        dashboard = new DashboardController(this);
         raceCalendar = cfg.raceCalendar;
         racePanel = findViewById(R.id.racePanel);
         raceKicker = findViewById(R.id.raceKicker);
@@ -758,8 +760,13 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             @Override
             public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
                 if (wallpaperPlayer == null) return;
-                wallpaperPlayer.scrolledAway(rv.canScrollVertically(-1)
-                        && rv.computeVerticalScrollOffset() > captionScrollSlop);
+                boolean scrolled = rv.canScrollVertically(-1)
+                        && rv.computeVerticalScrollOffset() > captionScrollSlop;
+                wallpaperPlayer.scrolledAway(scrolled);
+                if (dashboard != null) {
+                    boolean inDock = lastFocused < 0 || DockSlots.inDockRow(dockRow, singleRow, lastFocused, COLUMNS);
+                    dashboard.setGridScrolled(scrolled || !inDock);
+                }
             }
         });
 
@@ -1116,6 +1123,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
             return;
         }
         restartIdleClock();
+        if (dashboard != null) dashboard.onResume();
         promptsPaused = false;
         if (grid.getAdapter() == null) grid.setAdapter(adapter);   // dropped by onTrimMemory
         switch (tileRefresh.onResume(packagesChangedSinceRebuild())) {
@@ -1308,6 +1316,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
     public void onUserInteraction() {
         super.onUserInteraction();
         restartIdleClock();
+        if (dashboard != null) dashboard.onResume();
     }
 
     private void restartIdleClock() {
@@ -1326,6 +1335,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         root.removeCallbacks(showIdleClock);
         endReorder();   // Home or another app while reordering keeps the order so far
         wallpaperPlayer.stop();
+        if (dashboard != null) dashboard.onPause();
         stopAmbientAnimation();
         hero.animate().cancel();
         ambient.animate().cancel();
@@ -1848,7 +1858,9 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
         float h = card.getHeight() * scale + 2 * pad;
         float x = r.exactCenterX() - w / 2f;
         // advanced_effects lifts a focused grid tile by 4dp and the glass follows it; dock tiles stay put (#2135).
-        boolean lifted = advancedEffects && !DockSlots.inDockRow(dockRow, singleRow, position, COLUMNS);
+        boolean inDock = DockSlots.inDockRow(dockRow, singleRow, position, COLUMNS);
+        if (dashboard != null) dashboard.setGridScrolled(!inDock || (grid.canScrollVertically(-1) && grid.computeVerticalScrollOffset() > Math.round(12 * density)));
+        boolean lifted = advancedEffects && !inDock;
         float y = r.exactCenterY() - h / 2f - (lifted ? 4f * density : 0f);
 
         ViewGroup.LayoutParams lp = glass.getLayoutParams();

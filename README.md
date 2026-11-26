@@ -2,6 +2,24 @@
   <a href="https://cleanyour.tv"><img src="https://raw.githubusercontent.com/Gathin23/cleanyourtv/main/docs/banner.png" alt="CleanYourTV. Your TV, minus the ads. Strip the bloatware from any Android TV or Google TV over Wi-Fi and replace the ad-filled home screen with a clean launcher that looks like an Apple TV. No root, no cable, nothing uninstalled, and a one-line restore." width="800"></a>
 </p>
 
+## Custom Dashboard Edition — Widget Jadwal Sholat & Google Photos
+
+<p align="center">
+  <img src="docs/dashboard-preview-v2.jpg" alt="Custom Dashboard Preview: Jadwal Sholat Kemenag RI, Google Photos Slideshow, Cuaca & AQI, CPU/RAM/DISK Monitor, dan Custom Dock" width="800">
+</p>
+
+Fork kustom dari **CleanYourTV** dengan tambahan *dashboard overlay* ringan di layar beranda (`com.gathin.tvhome`):
+
+- **Widget Jadwal Sholat Compact (Kemenag RI / Aladhan `method=20`)**: menampilkan tanggal Hijriah, lokasi (**Depok**), 5 waktu sholat (**Subuh, Dzuhur, Ashar, Maghrib, Isya**) dengan sorotan waktu sholat berikutnya serta hitung mundur otomatis.
+- **Widget Slideshow Google Photos (`724 Story / by deni s`)**: memuat foto dari link album bersama Google Photos, mendukung orientasi *landscape* maupun *portrait* secara utuh (`fitCenter`), dan berganti otomatis setiap **1 menit**.
+  - *Konfigurasi*: sebelum menjalankan `launcher/build-and-install.sh`, isi link album bersama Google Photos Anda pada key `google_photos_album_url` di `launcher/app/src/main/res/values/config.xml` (secara default dikosongkan di repositori agar link album pribadi tidak terekspos).
+- **Cuaca & Kualitas Udara (AQI)**: suhu, kondisi cuaca bahasa Indonesia, dan US AQI untuk Depok di pojok kanan atas.
+- **Monitor Sistem Realtime (CPU / RAM / DISK)**: frekuensi CPU serta bar persentase pemakaian RAM dan penyimpanan internal di bawah jam.
+- **Auto-Hide Saat Scroll**: seluruh widget dashboard otomatis menghilang seketika saat pengguna menekan **Down** ke grid aplikasi di bawah dock, dan muncul kembali saat kembali ke baris dock.
+- **Kustomisasi Dock & Banner**: 5 slot dock dengan banner kustom (`YouTube Tanpa Iklan`, `FlyStream`, `IDLIX TV`, `LocalSend`, `Netflix`) serta dukungan penuh untuk `TCL G06` (Google TV 11).
+
+---
+
 <p align="center">
   Read in: <a href="README.he.md" lang="he" dir="rtl">עברית</a> · <a href="README.zh-CN.md">简体中文</a> · <a href="README.zh-TW.md">正體中文</a> · <a href="README.vi.md">Tiếng Việt</a> · <a href="README.ja.md">日本語</a> · <a href="README.it.md">Italiano</a> · <a href="README.pt-BR.md">Português</a> · <a href="README.nl.md">Nederlands</a> · <a href="README.de.md">Deutsch</a> · <a href="README.uk.md">Українська</a> · <a href="README.tr.md">Türkçe</a> · <a href="README.uz.md">Oʻzbekcha</a> · <a href="README.fr.md">Français</a> · <a href="README.es.md">Español</a> · <a href="README.el.md">Ελληνικά</a>
 </p>
